@@ -1,36 +1,69 @@
-import { useReducer, useState } from 'react';
+import { useState, useRef } from 'react';
 import './App.css';
 
-const ToDoForm = () => {
+const Header = () => {
+	return (
+		<div className='my-header'>
+			<h1>To Do List App</h1>
+			<h6>Most of us have too much going on to keep track of the simple things that need to get done. Hopefully this app will help with that.</h6>
+			<hr/>
+			<br/>
+		</div>
+	)
+}
+
+const Footer = () => {
+	return (
+		<div className='my-footer'>
+			<br/>
+			<br/>
+			<hr/>
+			<h6>This app was created by:</h6>
+			<h5>Brennan Stopnik</h5>
+		</div>
+	)
+}
+
+const ToDoForm = (props) => {
 
 	const [title, setTitle] = useState("")
 	const [priority, setPriority] = useState("")
 	const [description, setDescription] = useState("")
 
+	
+
 	return (
-		<div>
+		<div className='the-form'>
 			<label>Title: </label>
-			<input type="text" onChange={
+			<br/>
+			<input type="text" className='title' onChange={
 				(e) => {
 					setTitle(e.target.value)
 				}}/>
 			<br/>
 
 			<label>Priority: </label>
-			<select onChange={(e)=>{
+			<br/>
+			<select className='priority' onChange={(e)=>{
 				setPriority(e.target.value)
 				}}>
-					<option value=""></option>
+					<option value="">Select one</option>
 					<option value="Low">Low</option>
 					<option value="Medium">Medium</option>
 					<option value="High">High</option>
 			</select>
 			<br/>
 
-			<label>Description: </label>
-			<textarea type="textarea" onChange={(e)=>{
+			<label className='description'>Description: </label>
+			<br/>
+			<textarea type="textarea" className='description-area' onChange={(e)=>{
 				setDescription(e.target.value)
 			}}/>
+			<br/>
+
+			<button onClick={()=>{
+				props.handleAddToDo(title, priority, description)
+			}}>Add ToDo Item</button>
 		</div>
 	)
 }
@@ -38,9 +71,9 @@ const ToDoForm = () => {
 const ToDoListContainer = (props) => {
 	return (
 		<div>
-			<h1>ToDo List</h1>
+			<h2>The List</h2>
 			{props.toDoList.map((toDo)=>{
-				return <ToDoItem toDo={toDo} />
+				return <ToDoItem toDo={toDo} handleUpdateToDo={props.handleUpdateToDo}/>
 			})}
 		</div>
 	)
@@ -48,26 +81,27 @@ const ToDoListContainer = (props) => {
 
 const ToDoItem = (props) => {
 	return (
-			<div>
-				<h2>Title: {props.toDo.title}</h2>
-				<p>Priority: {props.toDo.priority}</p>
-				<p>Creation Date: {props.toDo.creationDate}</p>
+			<div className={`To-do-item ${props.toDo.priority}`}>
+				<hr/>
+				<br/>
+				<input type="checkbox" className='check' onClick={()=>{
+					props.handleUpdateToDo(props.toDo.title, props.toDo.creationDate)
+				}}/>
+				<label className='title-label'>{props.toDo.title}</label>
+				<h6>Priority: {props.toDo.priority}</h6>
+				<h6>Creation Date: {props.toDo.creationDate}</h6>
 				{props.toDo.completedDate && 
-					<p>Completed Date: {props.toDo.completedDate}</p>}
-				<p>Description: {props.toDo.description}</p>
+					<h6>Completed Date: {props.toDo.completedDate}</h6>}
+				<h6>Description: {props.toDo.description}</h6>
+				{/* <button onClick={()=>{
+					props.handleUpdateToDo(props.toDo.title, props.toDo.creationDate)
+				}}>Toggle Completed</button> */}
 			</div>
 	)
 }
 
 const App = () => {
-	const [toDoList, setToDoList] = useState([{
-		title: "Implement ToDo List",
-		description: "Implement the todo list application",
-		isComplete: false,
-		priority: "High",
-		creationDate: new Date().toString(),
-		completedDate: null
-	}])
+	const [toDoList, setToDoList] = useState([])
 
 	const handleAddToDo = (title, priority, description) => {
 		let newToDo = {
@@ -75,17 +109,38 @@ const App = () => {
 			priority: priority,
 			isComplete: false,
 			description: description,
-			creationDate: new Date().toString(),
+			creationDate: new Date().toString().slice(0, 21),
 			completedDate: null
 		}
 		const toDoListCopy = [...toDoList, newToDo]
 		setToDoList(toDoListCopy)
 	}
 
+	const handleUpdateToDo = (title, creationDate) => {
+		const toDoListCopy = [...toDoList]
+		let listCopy = toDoListCopy.map((toDo) => {
+			if (toDo.title === title && toDo.creationDate === creationDate) {
+				if (toDo.isComplete === false){
+					toDo.isComplete = true
+					toDo.completedDate = new Date().toString().slice(0, 21)
+				} else {
+					toDo.isComplete = false
+					toDo.completedDate = null
+				}
+				return toDo
+			} else {
+				return toDo
+			}
+		})
+		setToDoList(listCopy)
+	}
+
 	return (
 		<div className="App App-header">
-			<ToDoForm />
-			<ToDoListContainer toDoList={toDoList}/>
+			<Header />
+			<ToDoForm handleAddToDo={handleAddToDo} />
+			<ToDoListContainer toDoList={toDoList} handleUpdateToDo={handleUpdateToDo}/>
+			<Footer />
 		</div>
 	);
 }

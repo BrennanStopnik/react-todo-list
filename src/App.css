@@ -13,3 +13,66 @@
   color: white;
 }
 
+.my-header {
+  margin-left: 200px;
+  margin-right: 200px;
+}
+
+h1 {
+  margin-bottom: -30px;
+}
+
+.the-form {
+  border: 2px solid lightskyblue;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+h2 {
+  margin-bottom: -14px;
+}
+
+.title {
+  margin-bottom: 16px;
+}
+
+.priority {
+  margin-bottom: 16px;
+}
+
+.description-area {
+  margin-top: 12px;
+  margin-bottom: 10px;
+}
+
+.check {
+  width: 16px;
+  height: 16px;
+}
+
+.title-label {
+  padding-left: 10px;
+  font-weight: bolder;
+}
+
+.To-do-item {
+  margin: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+}
+
+.To-do-item.High {
+  color: red;
+}
+
+.To-do-item.Medium {
+  color: yellow;
+}
+
+.To-do-item.Low {
+  color: green;
+}
+
