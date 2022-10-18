@@ -36,7 +36,7 @@ const ToDoForm = (props) => {
 		<div className='the-form'>
 			<label>Title: </label>
 			<br/>
-			<input type="text" className='title' onChange={
+			<input type="text" value={ title } className='title' onChange={
 				(e) => {
 					setTitle(e.target.value)
 				}}/>
@@ -44,7 +44,7 @@ const ToDoForm = (props) => {
 
 			<label>Priority: </label>
 			<br/>
-			<select className='priority' onChange={(e)=>{
+			<select className='priority' value={ priority } onChange={(e)=>{
 				setPriority(e.target.value)
 				}}>
 					<option value="">Select one</option>
@@ -56,13 +56,16 @@ const ToDoForm = (props) => {
 
 			<label className='description'>Description: </label>
 			<br/>
-			<textarea type="textarea" className='description-area' onChange={(e)=>{
+			<textarea type="textarea" value={ description } className='description-area' onChange={(e)=>{
 				setDescription(e.target.value)
 			}}/>
 			<br/>
 
 			<button onClick={()=>{
 				props.handleAddToDo(title, priority, description)
+				setTitle("")
+				setPriority("")
+				setDescription("")
 			}}>Add ToDo Item</button>
 		</div>
 	)
@@ -80,21 +83,24 @@ const ToDoListContainer = (props) => {
 }
 
 const ToDoItem = (props) => {
+
+	const {title, priority, creationDate, description, completedDate} = props.toDo
+
 	return (
-			<div className={`To-do-item ${props.toDo.priority}`}>
+			<div className={`To-do-item ${priority}`}>
 				<hr/>
 				<br/>
 				<input type="checkbox" className='check' onClick={()=>{
-					props.handleUpdateToDo(props.toDo.title, props.toDo.creationDate)
+					props.handleUpdateToDo(title, creationDate)
 				}}/>
-				<label className='title-label'>{props.toDo.title}</label>
-				<h6>Priority: {props.toDo.priority}</h6>
-				<h6>Creation Date: {props.toDo.creationDate}</h6>
-				{props.toDo.completedDate && 
-					<h6>Completed Date: {props.toDo.completedDate}</h6>}
-				<h6>Description: {props.toDo.description}</h6>
+				<label className='title-label'>{title}</label>
+				<h6>Priority: {priority}</h6>
+				<h6>Creation Date: {creationDate}</h6>
+				{completedDate && 
+					<h6>Completed Date: {completedDate}</h6>}
+				<h6>Description: {description}</h6>
 				{/* <button onClick={()=>{
-					props.handleUpdateToDo(props.toDo.title, props.toDo.creationDate)
+					props.handleUpdateToDo(title, creationDate)
 				}}>Toggle Completed</button> */}
 			</div>
 	)
